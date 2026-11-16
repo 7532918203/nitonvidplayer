@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"fyneVideoPlayer/model"
+	"os"
 )
 
 func SiHei() {
@@ -10,5 +11,12 @@ func SiHei() {
 }
 
 func ScanLibrary(path string) (*model.Library, error) {
-	return &model.Library{Path: path}, nil
+	library := &model.Library{}
+	entries, _ := os.ReadDir(path)
+	for _, entry := range entries {
+		library.Shows = append(library.Shows, entry.Name())
+	}
+	library.Path = path
+
+	return library, nil
 }

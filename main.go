@@ -11,8 +11,9 @@ func main() {
 		fmt.Fprintln(os.Stderr, "usage: animeplayer <library folder>")
 		os.Exit(2)
 	}
-	library, error := parser.ScanLibrary(os.Args[1])
-	if error != nil {
+	library, _ := parser.ScanLibrary(os.Args[1])
+
+	for _, v := range library.Shows {
+		fmt.Println(v)
 	}
-	fmt.Println(library.Path)
 }
