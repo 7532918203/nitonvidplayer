@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"fyneVideoPlayer/model"
 	"os"
+	path2 "path"
 )
 
 func SiHei() {
@@ -11,12 +12,36 @@ func SiHei() {
 }
 
 func ScanLibrary(path string) (*model.Library, error) {
-	library := &model.Library{}
-	entries, _ := os.ReadDir(path)
-	for _, entry := range entries {
-		library.Shows = append(library.Shows, entry.Name())
+	episodes, err := traverseDir(path)
+	if err != nil {
+		return nil, err
 	}
-	library.Path = path
 
+	library := &model.Library{}
+
+	fmt.Println("Episodes found:", len(episodes))
+
+	for _, episode := range episodes {
+		fmt.Println("- ", episode.Name)
+	}
 	return library, nil
+}
+
+func traverseDir(path string) ([]*model.Episode, error) {
+	entries, _ := os.ReadDir(path)
+	episodes := []*model.Episode{}
+	episodeCount := 0
+
+	for _, entry := range entries {
+		fullPath := path2.Join(path, entry.Name())
+		if entry.IsDir() {
+			subEpisodes, _ := traverseDir(fullPath)
+
+			episodes = append(episodes, subEpisodes...)
+		} else {
+			episodeCount++
+			episodes = append(episodes, &model.Episode{entry.Name()})
+		}
+	}
+	return episodes, nil
 }

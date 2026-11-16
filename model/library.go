@@ -2,6 +2,6 @@ package model
 
 type Library struct {
 	Path     string
-	Shows    []string
+	Shows    []Show
 	Warnings []string
 }
