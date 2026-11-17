@@ -1,6 +1,7 @@
 package model
 
 type Show struct {
-	Name   string
-	Season []*Season
+	Name     string
+	Seasons  []*Season
+	Episodes []*Episode
 }
